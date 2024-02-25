@@ -5,6 +5,25 @@ import Comment from "./Comment";
 const CommentList = () => {
   const [sortBy, setSortBy] = useState(null);
   const [sortedComments, setSortedComments] = useState(ApiData);
+  const [newCommentText, setNewCommentText] = useState("");
+
+  const handleNewCommentChange = (event) => {
+    setNewCommentText(event.target.value);
+  };
+
+  const postNewComment = () => {
+    const newCommentObj = {
+      id: ApiData.length + 1,
+      text: newCommentText,
+      user: "New User", // Set the user for the new comment
+      timestamp: new Date().toISOString(),
+      replies: [],
+      starred: false,
+    };
+    ApiData.push(newCommentObj); // Add the new comment to the ApiData array
+    setSortedComments([...sortedComments, newCommentObj]); // Update the sortedComments state
+    setNewCommentText(""); // Clear the new comment input field
+  };
 
   // Function to sort comments by date posted
   const sortByDatePosted = () => {
@@ -23,15 +42,20 @@ const CommentList = () => {
         <div className="flex flex-col w-autp h-auto mt-2 mx-2">
           <div className="mt-2">
             <textarea
-              id="about"
-              name="about"
+              id="newComment"
+              name="newComment"
               rows={4}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              defaultValue={"Type something"}
+              value={newCommentText}
+              onChange={handleNewCommentChange}
+              className="block w-full rounded-md border-1 border-gray-300 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              placeholder="Type your new comment here"
             />
           </div>
           <div className="flex justify-end my-4">
-            <button className="py-1 px-8 bg-gray-100 text-slate-800 font-semibold rounded-md hover:bg-gray-200 hover:text-black">
+            <button
+              onClick={postNewComment}
+              className="py-1 px-8 bg-gray-100 text-slate-800 font-semibold rounded-md hover:bg-gray-200 hover:text-black"
+            >
               POST
             </button>
           </div>
