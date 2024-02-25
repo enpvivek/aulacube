@@ -2,28 +2,29 @@ import { useState } from "react";
 
 const Comment = ({ comment }) => {
   const [showList, setShowList] = useState(false);
+
   const handleReply = () => {
     setShowList(!showList);
   };
 
-  console.log(comment);
   return (
-    <div className="flex flex-col h-auto w-full">
-      <div className="flex flex-col w-autp h-auto mt-2 mx-2">
+    <div className="flex flex-col w-full h-auto">
+      <div className="flex flex-col w-auto h-auto mt-2 mx-2">
         <div className="mt-2">
           <textarea
             id="about"
             name="about"
             rows={4}
-            className="block w-full rounded-md border-0 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             defaultValue={comment.text}
+            className="block w-full rounded-md border-0 py-1.5 px-4 text-lg text-gray-700 shadow-sm placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+            readOnly
           />
         </div>
         <div className="flex justify-between my-4">
           <p onClick={handleReply} className="cursor-pointer">
             {showList ? "Hide Replies" : "Show Replies"}
           </p>
-          <div className="flex flex-row justify-end gap-4">
+          <div className="flex gap-4 justify-end">
             <button className="py-1 px-8 bg-gray-100 text-slate-800 font-semibold rounded-md hover:bg-gray-200 hover:text-black">
               Star ⭐
             </button>

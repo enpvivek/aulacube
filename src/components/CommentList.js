@@ -56,7 +56,7 @@ const CommentList = () => {
   };
 
   return (
-    <div className="flex flex-col h-auto w-auto lg:m-32 md:m-16 sm:m-2 ">
+    <div className="flex flex-col h-auto w-auto lg:mx-32 md:m-16 sm:m-2 ">
       <h1 className="block text-lg font-medium leading-6 text-gray-100 my-4">
         What's on your mind?
       </h1>
@@ -106,9 +106,11 @@ const CommentList = () => {
         </div>
       </div>
       {/* Display sorted comments based on the selected sorting option */}
-      {sortedComments.map((comment) => (
-        <Comment key={comment.id} comment={comment} />
-      ))}
+      <div className="w-auto h-auto">
+        {sortedComments.map((comment) => (
+          <Comment key={comment.id} comment={comment} />
+        ))}
+      </div>
     </div>
   );
 };
