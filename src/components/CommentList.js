@@ -1,38 +1,60 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ApiData from "../utils/sampleApiData";
 import Comment from "./Comment";
 
 const CommentList = () => {
   const [sortBy, setSortBy] = useState(null);
-  const [sortedComments, setSortedComments] = useState(ApiData);
+  const [sortedComments, setSortedComments] = useState([]);
   const [newCommentText, setNewCommentText] = useState("");
 
   const handleNewCommentChange = (event) => {
     setNewCommentText(event.target.value);
   };
 
+  useEffect(() => {
+    const existingComments = JSON.parse(localStorage.getItem("comments")) || [];
+    const combinedComments = [...existingComments, ...ApiData];
+
+    // Sort the combined comments by date if needed
+    setSortedComments(combinedComments);
+  }, []);
+
   const postNewComment = () => {
     const newCommentObj = {
       id: ApiData.length + 1,
       text: newCommentText,
-      user: "New User", // Set the user for the new comment
+      user: "New User",
       timestamp: new Date().toISOString(),
       replies: [],
       starred: false,
     };
-    ApiData.push(newCommentObj); // Add the new comment to the ApiData array
-    setSortedComments([...sortedComments, newCommentObj]); // Update the sortedComments state
-    setNewCommentText(""); // Clear the new comment input field
+
+    // Get existing comments or initialize an empty array
+    const existingComments = JSON.parse(localStorage.getItem("comments")) || [];
+
+    // Add the new comment to the existing comments
+    existingComments.push(newCommentObj);
+
+    // Save the updated comments back to localStorage
+    localStorage.setItem("comments", JSON.stringify(existingComments));
+
+    // Combine new comment with ApiData and update state
+    const combinedComments = [...existingComments, ...ApiData];
+    setSortedComments(combinedComments);
+
+    // Clear the input field after posting
+    setNewCommentText("");
   };
 
   // Function to sort comments by date posted
   const sortByDatePosted = () => {
-    const sortedByDate = [...ApiData].sort(
+    const sortedByDate = [...sortedComments].sort(
       (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
     );
     setSortedComments(sortedByDate);
     setSortBy("date");
   };
+
   return (
     <div className="flex flex-col h-auto w-auto lg:m-32 md:m-16 sm:m-2 ">
       <h1 className="block text-lg font-medium leading-6 text-gray-100 my-4">
